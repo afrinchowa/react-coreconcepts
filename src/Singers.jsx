@@ -1,14 +1,12 @@
-import React from 'react'
+const Singers = ({ singer }) => {
+  if (!singer) return null;
 
-const Singers = ({singer}) => {
   return (
-    <div>
-        <h3>Singers:{singer.name}</h3>
-        <p>Singers:{singer.age}</p>
-        
-    
+    <div className="card singer-card">
+      <h3>Singer: {singer.name}</h3>
+      <p>Age: {singer.age}</p>
     </div>
-  )
-}
+  );
+};
 
-export default Singers
+export default Singers;

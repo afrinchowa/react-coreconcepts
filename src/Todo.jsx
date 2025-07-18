@@ -46,10 +46,12 @@
 //     </ol>
 //   );
 // }
-import React from 'react'
-
-export const Todo = () => {
+export const Todo = ({ task, isDone }) => {
   return (
-    <div>Todo</div>
-  )
-}
+    <div className={`card todo ${isDone ? 'done' : 'pending'}`}>
+      <span>{task}</span>
+      <span>{isDone ? '✅' : '❌'}</span>
+    </div>
+  );
+};
+

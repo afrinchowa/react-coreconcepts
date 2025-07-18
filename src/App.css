@@ -1,0 +1,77 @@
+/* App.css */
+
+/* Reset and base styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f4f8;
+  color: #333;
+}
+
+/* Container styles */
+h1 {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 2.5rem;
+  color: #4b4b4b;
+}
+
+.App {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Generic card component style */
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 15px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Person component */
+h3 {
+  text-align: center;
+  font-weight: 500;
+  margin-top: 20px;
+}
+
+/* Singers styles */
+.singer-card h3 {
+  color: #5d5c61;
+}
+
+.singer-card p {
+  color: #7d7d7d;
+  margin-top: 5px;
+}
+
+/* Todo styles */
+.todo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo.done {
+  text-decoration: line-through;
+  color: #7fa99b;
+}
+
+.todo.pending {
+  color: #d2601a;
+}
+
+/* Actor styles */
+.actor-card {
+  background-color: #e7efff;
+  color: #253858;
+}

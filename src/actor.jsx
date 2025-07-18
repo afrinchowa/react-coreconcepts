@@ -1,9 +1,7 @@
-
-import React from 'react'
-
-export const Actor = ({name}) => {
+export const Actor = ({ name }) => {
   return (
-    <div>Actor:{name}</div>
-  )
-}
-
+    <div className="card actor-card">
+      <h3>Actor: {name}</h3>
+    </div>
+  );
+};
