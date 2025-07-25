@@ -4,6 +4,7 @@ import Singers from "./Singers";
 import { Todo } from "./Todo";
 import "./App.css";
 import { Book } from "./Book";
+import { Counter } from "./Counter";
 
 function App() {
   const actors = ["Sakib", "Raj", "Jas", "Alex"];
@@ -44,6 +45,8 @@ function App() {
       {actors.map((actor, index) => (
         <Actor key={index} name={actor} />
       ))}
+
+      <Counter/>
     </div>
   );
 }
