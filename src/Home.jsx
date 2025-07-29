@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import QuoteOfTheDay from "./QuoteOfTheDay";
 
 function TaskTracker() {
   const [activeTab, setActiveTab] = useState("week"); // 'week' or 'month'
@@ -34,7 +35,8 @@ function TaskTracker() {
   };
 
   return (
-    <div style={containerStyle}>
+<div>
+   <div style={containerStyle}>
       <h2>🗓️ Weekly & Monthly Task Tracker</h2>
 
       <div style={tabWrapper}>
@@ -89,6 +91,9 @@ function TaskTracker() {
         ))}
       </ul>
     </div>
+<QuoteOfTheDay/>
+</div>
+ 
   );
 }
 
