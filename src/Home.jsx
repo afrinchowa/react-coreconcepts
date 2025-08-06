@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import QuoteOfTheDay from "./QuoteOfTheDay";
+import FocusTimer from "./FocusTimer";
+import MoodTracker from "./MoodTracker";
+import ToggleText from "./ToggleText";
 
 function TaskTracker() {
-  const [activeTab, setActiveTab] = useState("week"); // 'week' or 'month'
+  const [activeTab, setActiveTab] = useState("week");
   const [input, setInput] = useState("");
   const [tasks, setTasks] = useState({
     week: [],
@@ -35,81 +38,107 @@ function TaskTracker() {
   };
 
   return (
-<div>
-   <div style={containerStyle}>
-      <h2>🗓️ Weekly & Monthly Task Tracker</h2>
+    <div style={pageWrapper}>
+      <div style={containerStyle}>
+        <h2 style={pageTitle}>🗓️ Weekly & Monthly Task Tracker</h2>
 
-      <div style={tabWrapper}>
-        <button
-          onClick={() => setActiveTab("week")}
-          style={activeTab === "week" ? activeTabStyle : tabStyle}
-        >
-          📅 This Week
-        </button>
-        <button
-          onClick={() => setActiveTab("month")}
-          style={activeTab === "month" ? activeTabStyle : tabStyle}
-        >
-          📆 This Month
-        </button>
+        <div style={tabWrapper}>
+          <button
+            onClick={() => setActiveTab("week")}
+            style={activeTab === "week" ? activeTabStyle : tabStyle}
+          >
+            📅 This Week
+          </button>
+          <button
+            onClick={() => setActiveTab("month")}
+            style={activeTab === "month" ? activeTabStyle : tabStyle}
+          >
+            📆 This Month
+          </button>
+        </div>
+
+        <div style={inputGroup}>
+          <input
+            type="text"
+            placeholder={`Add a ${activeTab} task...`}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            style={inputStyle}
+          />
+          <button onClick={handleAddTask} style={addBtn}>
+            ➕
+          </button>
+        </div>
+
+        <ul style={taskList}>
+          {tasks[activeTab].map((task, index) => (
+            <li key={index} style={taskItem}>
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => toggleComplete(index)}
+              />
+              <span
+                style={{
+                  ...taskText,
+                  textDecoration: task.completed ? "line-through" : "none",
+                  color: task.completed ? "#888" : "#000",
+                }}
+              >
+                {task.text}
+              </span>
+              <button onClick={() => deleteTask(index)} style={delBtn}>
+                ❌
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      <div style={inputGroup}>
-        <input
-          type="text"
-          placeholder={`Add a ${activeTab} task...`}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          style={inputStyle}
-        />
-        <button onClick={handleAddTask} style={addBtn}>
-          ➕
-        </button>
+      <div style={widgetWrapper}>
+        <QuoteOfTheDay />
+        <FocusTimer />
+        <MoodTracker />
+        <ToggleText />
       </div>
-
-      <ul style={taskList}>
-        {tasks[activeTab].map((task, index) => (
-          <li key={index} style={taskItem}>
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => toggleComplete(index)}
-            />
-            <span
-              style={{
-                ...taskText,
-                textDecoration: task.completed ? "line-through" : "none",
-                color: task.completed ? "#888" : "#000",
-              }}
-            >
-              {task.text}
-            </span>
-            <button onClick={() => deleteTask(index)} style={delBtn}>
-              ❌
-            </button>
-          </li>
-        ))}
-      </ul>
     </div>
-<QuoteOfTheDay/>
-</div>
- 
   );
 }
 
 // ✨ Styles
+const pageWrapper = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  minHeight: "100vh",
+  backgroundColor: "#f0f2f5",
+  padding: "40px 20px",
+  boxSizing: "border-box",
+};
+
 const containerStyle = {
+  width: "100%",
   maxWidth: "600px",
-  margin: "50px auto",
-  padding: "30px",
   backgroundColor: "#fff",
   borderRadius: "12px",
-  boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+  boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+  padding: "30px",
+  marginBottom: "30px",
+  boxSizing: "border-box",
+};
+
+const pageTitle = {
+  textAlign: "center",
+  fontSize: "24px",
+  color: "#333",
+  marginBottom: "20px",
 };
 
 const tabWrapper = {
   display: "flex",
   justifyContent: "center",
+  flexWrap: "wrap",
   marginBottom: "20px",
   gap: "10px",
 };
@@ -121,6 +150,7 @@ const tabStyle = {
   border: "none",
   borderRadius: "6px",
   cursor: "pointer",
+  flexShrink: 0,
 };
 
 const activeTabStyle = {
@@ -131,12 +161,15 @@ const activeTabStyle = {
 
 const inputGroup = {
   display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap",
   gap: "10px",
   marginBottom: "20px",
 };
 
 const inputStyle = {
   flex: 1,
+  minWidth: "0",
   padding: "10px",
   fontSize: "16px",
   borderRadius: "6px",
@@ -150,6 +183,7 @@ const addBtn = {
   border: "none",
   borderRadius: "6px",
   cursor: "pointer",
+  flexShrink: 0,
 };
 
 const taskList = {
@@ -165,6 +199,7 @@ const taskItem = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  flexWrap: "wrap",
 };
 
 const taskText = {
@@ -179,6 +214,16 @@ const delBtn = {
   borderRadius: "4px",
   padding: "6px 10px",
   cursor: "pointer",
+  flexShrink: 0,
+};
+
+const widgetWrapper = {
+  width: "100%",
+  maxWidth: "600px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "20px",
+  boxSizing: "border-box",
 };
 
 export default TaskTracker;
