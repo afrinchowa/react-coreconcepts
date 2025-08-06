@@ -3,6 +3,7 @@ import QuoteOfTheDay from "./QuoteOfTheDay";
 import FocusTimer from "./FocusTimer";
 import MoodTracker from "./MoodTracker";
 import ToggleText from "./ToggleText";
+import ProductivityChart from "./ProductivityChart";
 
 function TaskTracker() {
   const [activeTab, setActiveTab] = useState("week");
@@ -100,6 +101,7 @@ function TaskTracker() {
         <FocusTimer />
         <MoodTracker />
         <ToggleText />
+         <ProductivityChart />
       </div>
     </div>
   );
