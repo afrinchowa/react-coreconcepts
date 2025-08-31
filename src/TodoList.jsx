@@ -11,10 +11,12 @@ const Home = () => {
   const today = new Date();
   const todayDate = today.toISOString().split("T")[0];
 
+  // Save tasks in localStorage
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
+  // Add Task
   const handleAddTask = () => {
     if (task.trim() === "") return;
     const newTask = {
@@ -27,6 +29,7 @@ const Home = () => {
     setTask("");
   };
 
+  // Toggle completion
   const toggleComplete = (id) => {
     setTasks(
       tasks.map((t) =>
@@ -35,6 +38,17 @@ const Home = () => {
     );
   };
 
+  // Delete task
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((t) => t.id !== id));
+  };
+
+  // Clear completed
+  const clearCompleted = () => {
+    setTasks(tasks.filter((t) => !t.completed));
+  };
+
+  // Date range filters
   const getTasksByDateRange = (daysBack) => {
     const cutoff = new Date();
     cutoff.setDate(today.getDate() - daysBack);
@@ -45,49 +59,80 @@ const Home = () => {
   const weeklyTasks = getTasksByDateRange(7);
   const monthlyTasks = getTasksByDateRange(30);
 
-  const renderTasks = (taskList) => (
-    <ul>
-      {taskList.map((t) => (
-        <li
-          key={t.id}
-          style={{
-            ...styles.task,
-            textDecoration: t.completed ? "line-through" : "none",
-            color: t.completed ? "gray" : "black",
-          }}
-          onClick={() => toggleComplete(t.id)}
-        >
-          {t.text} ({t.date})
-        </li>
-      ))}
-    </ul>
-  );
+  const taskLists = {
+    daily: dailyTasks,
+    weekly: weeklyTasks,
+    monthly: monthlyTasks,
+  };
+
+  const renderTasks = (taskList) =>
+    taskList.length === 0 ? (
+      <p style={styles.emptyMsg}>✨ No tasks yet. Add one above!</p>
+    ) : (
+      <ul style={styles.ul}>
+        {taskList.map((t) => (
+          <li
+            key={t.id}
+            style={{
+              ...styles.task,
+              textDecoration: t.completed ? "line-through" : "none",
+              color: t.completed ? "gray" : "black",
+            }}
+          >
+            <span onClick={() => toggleComplete(t.id)} style={styles.taskText}>
+              {t.text} <small style={styles.date}>({t.date})</small>
+            </span>
+            <button onClick={() => deleteTask(t.id)} style={styles.deleteBtn}>
+              ❌
+            </button>
+          </li>
+        ))}
+      </ul>
+    );
 
   return (
     <div style={styles.page}>
-      <h1 style={styles.heading}>🗓️ Daily, Weekly & Monthly To-Do Tracker</h1>
+      <h1 style={styles.heading}>🗓️ To-Do Tracker</h1>
 
+      {/* Input */}
       <div style={styles.inputWrapper}>
         <input
           style={styles.input}
           value={task}
           onChange={(e) => setTask(e.target.value)}
           placeholder="Add a task for today..."
+          onKeyDown={(e) => e.key === "Enter" && handleAddTask()}
         />
-        <button onClick={handleAddTask} style={styles.button}>➕ Add</button>
+        <button onClick={handleAddTask} style={styles.button}>
+          ➕ Add
+        </button>
       </div>
 
+      {/* Tabs */}
       <div style={styles.navButtons}>
-        <button onClick={() => setSelectedView("daily")} style={selectedView === "daily" ? styles.activeTab : styles.tab}>Daily</button>
-        <button onClick={() => setSelectedView("weekly")} style={selectedView === "weekly" ? styles.activeTab : styles.tab}>Weekly</button>
-        <button onClick={() => setSelectedView("monthly")} style={selectedView === "monthly" ? styles.activeTab : styles.tab}>Monthly</button>
+        {["daily", "weekly", "monthly"].map((view) => (
+          <button
+            key={view}
+            onClick={() => setSelectedView(view)}
+            style={
+              selectedView === view ? styles.activeTab : styles.tab
+            }
+          >
+            {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
+            <span style={styles.badge}>{taskLists[view].length}</span>
+          </button>
+        ))}
       </div>
 
-      <div style={styles.taskList}>
-        {selectedView === "daily" && renderTasks(dailyTasks)}
-        {selectedView === "weekly" && renderTasks(weeklyTasks)}
-        {selectedView === "monthly" && renderTasks(monthlyTasks)}
-      </div>
+      {/* Task List */}
+      <div style={styles.taskList}>{renderTasks(taskLists[selectedView])}</div>
+
+      {/* Clear Completed */}
+      {tasks.some((t) => t.completed) && (
+        <button onClick={clearCompleted} style={styles.clearBtn}>
+          🧹 Clear Completed
+        </button>
+      )}
     </div>
   );
 };
@@ -114,14 +159,15 @@ const styles = {
   },
   input: {
     flex: 1,
-    padding: "10px",
+    padding: "12px",
     fontSize: "16px",
     borderRadius: "6px",
     border: "1px solid #ccc",
+    outline: "none",
   },
   button: {
     marginLeft: "10px",
-    padding: "10px 20px",
+    padding: "12px 20px",
     fontSize: "16px",
     backgroundColor: "#4f46e5",
     color: "white",
@@ -151,13 +197,64 @@ const styles = {
     border: "none",
     fontSize: "14px",
   },
+  badge: {
+    background: "white",
+    color: "#4f46e5",
+    borderRadius: "12px",
+    padding: "2px 8px",
+    marginLeft: "6px",
+    fontSize: "12px",
+    fontWeight: "bold",
+  },
   taskList: {
     textAlign: "left",
+  },
+  ul: {
+    listStyle: "none",
+    padding: 0,
   },
   task: {
     fontSize: "18px",
     marginBottom: "10px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    background: "#fff",
+    padding: "10px 14px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+    transition: "0.2s ease",
+  },
+  taskText: {
     cursor: "pointer",
+  },
+  date: {
+    fontSize: "12px",
+    color: "#888",
+  },
+  deleteBtn: {
+    background: "transparent",
+    border: "none",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+  clearBtn: {
+    marginTop: "20px",
+    background: "#ef4444",
+    color: "white",
+    border: "none",
+    padding: "10px 18px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "14px",
+    display: "block",
+    marginLeft: "auto",
+  },
+  emptyMsg: {
+    textAlign: "center",
+    color: "#666",
+    fontStyle: "italic",
+    marginTop: "20px",
   },
 };
 
