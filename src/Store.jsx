@@ -43,7 +43,7 @@ export default function Store() {
             whileHover={{ scale: 1.05 }}
             className="px-6 py-2.5 bg-gray-100 text-gray-800 font-medium rounded-xl shadow hover:bg-gray-200 transition"
           >
-            Learn More
+            Learn More and think more as u know 
           </motion.button>
         </div>
       </motion.div>
