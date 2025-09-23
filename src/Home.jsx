@@ -192,10 +192,7 @@ const taskList = {
   listStyle: "none",
   padding: 0,
 };
-const taskList = {
-  listStyle: "none",
-  padding: 0,
-};
+
 
 const taskItem = {
   backgroundColor: "#f8f8f8",
