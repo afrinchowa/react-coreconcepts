@@ -204,6 +204,16 @@ const taskItem = {
   justifyContent: "space-between",
   flexWrap: "wrap",
 };
+const taskItem = {
+  backgroundColor: "#f8f8f8",
+  marginBottom: "10px",
+  padding: "10px 15px",
+  borderRadius: "6px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  flexWrap: "wrap",
+};
 
 const taskText = {
   flex: 1,
