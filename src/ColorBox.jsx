@@ -81,5 +81,11 @@ const copiedStyle = {
   color: "green",
   fontWeight: "bold",
 };
+const copiedStyle = {
+  marginTop: "12px",
+  fontSize: "16px",
+  color: "green",
+  fontWeight: "bold",
+};
 
 export default ColorBox;
